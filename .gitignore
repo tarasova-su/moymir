@@ -1,0 +1,18 @@
+# IDE- and OS-specific
+ 
+.project
+.rvmrc
+.idea
+nbproject
+*~
+.*.sw?
+
+
+# Unnecessary files
+
+.bundle
+log/*
+tmp/*
+db/*.sqlite3
+test
+

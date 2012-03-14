@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+bundle exec rake gemspec:generate build
+cd pkg
+gem uninstall moymir
+gem install --local moymir
+cd ..
