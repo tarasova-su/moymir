@@ -19,9 +19,9 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = 'moymir'
     gem.summary = "Mail.ru integration for Rack & Rails application"
-    gem.email = ""
-    gem.homepage = ""
-    gem.authors = [""]
+    gem.email = "ahmadeeva.su@gmail.com"
+    gem.homepage = "https://github.com/ahmadeeva-su/moymir"
+    gem.authors = ["Ahmadeeva Svetlana"]
 
     gem.add_dependency "ie_iframe_cookies", '~> 0.1.2'
   end

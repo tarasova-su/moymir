@@ -8,39 +8,16 @@ Gem::Specification.new do |s|
   s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [""]
-  s.date = "2012-01-04"
-  s.email = ""
+  s.authors = ["Ahmadeeva Svetlana"]
+  s.date = "2012-03-14"
+  s.email = "ahmadeeva.su@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.md"
   ]
-  s.files = [
-    "Gemfile",
-    "Gemfile.lock",
-    "LICENSE",
-    "README.md",
-    "Rakefile",
-    "VERSION",
-    "app/.gitkeep",
-    "moymir.gemspec",
-    "init.rb",
-    "install",
-    "lib/moymir.rb",
-    "lib/moymir/config.rb",
-    "lib/moymir/engine.rb",
-    "lib/moymir/rack/post_canvas_middleware.rb",
-    "lib/moymir/rails/controller.rb",
-    "lib/moymir/rails/controller/redirects.rb",
-    "lib/moymir/rails/controller/url_rewriting.rb",
-    "lib/moymir/rails/helpers.rb",
-    "lib/moymir/rails/helpers/javascript_helper.rb",
-    "lib/moymir/user.rb",
-    "lib/moymir/api.rb"
-  ]
-  s.homepage = ""
+  s.homepage = "https://github.com/ahmadeeva-su/moymir"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.13"
+  s.rubygems_version = "1.8.16"
   s.summary = "Mail.ru integration for Rack & Rails application"
 
   if s.respond_to? :specification_version then
