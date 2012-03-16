@@ -2,8 +2,8 @@ module Moymir
   class User
     class << self
       # Creates an instance of Moymir::User using application config and request parameters
-      def from_request(config, options)
-        return if options.blank? || options['vid'].nil?
+      def from_request(options)
+        return if options.nil? || options['vid'].nil?
         
         new(options)
       end
@@ -15,7 +15,7 @@ module Moymir
 
     # Checks if user is authenticated in the application
     def authenticated?      
-      uid#session_key && !session_key.empty? && Time.now < session_expires_at
+      !session_key.blank? && Time.now < session_expires_at
     end
 
     # Mailru UID

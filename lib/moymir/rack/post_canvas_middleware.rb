@@ -19,7 +19,7 @@ module Moymir
         # Put signed_request parameter to the same place where HTTP header X-Signed-Request come.
         # This let us work both with params and HTTP headers in the same way. Very useful for AJAX.
         
-        %w{vid session_key session_expire ext_perm sig}.each do |attr|
+        %w{vid session_key session_expire ext_perm}.each do |attr|
           env["HTTP_#{attr.upcase}"] ||= request.POST[attr]
         end
         

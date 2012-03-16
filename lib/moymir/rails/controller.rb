@@ -38,8 +38,10 @@ module Moymir
       end
 
       def moymir_params
+        return if request.params["sig"].present? and !signature_valid?(params)
+        
         {}.tap do |params|
-          %w{vid session_key session_expire ext_perm sig}.each do |attr|
+          %w{vid session_key session_expire ext_perm}.each do |attr|
             params[attr] = request.env["HTTP_#{attr.upcase}"] || request.params[attr] || flash[attr]
           end
         end
@@ -48,7 +50,14 @@ module Moymir
       private
 
       def fetch_current_moymir_user
-        Moymir::User.from_request(moymir, moymir_params) # || Moymir::User.from_cookie(moymir, moymir_cookie) 
+        Moymir::User.from_request(moymir_params)
+      end
+      
+      def signature_valid?(params)
+        param_string = params.except(:sig, :controller, :action).sort.map{|key, value| "#{key}=#{value}"}.join
+        secret_key = moymir.secret_key
+        
+        params[:sig] == Digest::MD5.hexdigest(param_string + secret_key)
       end
     end
 

@@ -12,7 +12,7 @@ module Moymir
 
         # Overrides ActionController::Base#redirect_to to pass signed_request in flash[]
         def redirect_to_with_moymir_params(*args)
-          %w{vid session_key session_expire ext_perm sig}.each do |attr|
+          %w{vid session_key session_expire ext_perm}.each do |attr|
             flash[attr] = moymir_params[attr]
           end
 
