@@ -13,13 +13,15 @@ module Moymir
           # Fix cookie permission issue in IE
           before_filter :normal_cookies_for_ie_in_iframes!
 
-          helper_method(:moymir, :moymir_params, :current_moymir_user, :params_without_moymir_data)
+          helper_method(:moymir, :moymir_params, :signed_params, :current_moymir_user, :params_without_moymir_data)
 
           helper Moymir::Rails::Helpers
         end
       end
 
       protected
+
+      MOYMIR_PARAM_NAMES = %w{app_id session_key session_expire oid vid is_app_user ext_perm window_id view referer_type referer_id authentication_key sig }
 
       # Accessor to current application config. Override it in your controller
       # if you need multi-application support or per-request configuration selection.
@@ -34,31 +36,34 @@ module Moymir
 
       # A hash of params passed to this action, excluding secure information passed by Moymir
       def params_without_moymir_data
-        params.except(:vid, :session_key, :session_expire, :ext_perm, :sig)
+        params.except(*MOYMIR_PARAM_NAMES)
       end
 
+      # params coming directly from moymir
       def moymir_params
-        return if request.params["sig"].present? and !signature_valid?(params)
-        
-        {}.tap do |params|
-          %w{vid session_key session_expire ext_perm}.each do |attr|
-            params[attr] = request.env["HTTP_#{attr.upcase}"] || request.params[attr] || flash[attr]
-          end
+        params.slice(*MOYMIR_PARAM_NAMES)
+      end
+      
+      # encrypted moymir params
+      def signed_params
+        if moymir_params.any?
+          encrypt(moymir_params)
+        else
+          request.env["HTTP_SIGNED_PARAMS"] || request.params['signed_params'] || flash['signed_params']
         end
       end
 
       private
 
-      def fetch_current_moymir_user
-        Moymir::User.from_request(moymir_params)
-      end
-      
-      def signature_valid?(params)
-        param_string = params.except(:sig, :controller, :action).sort.map{|key, value| "#{key}=#{value}"}.join
-        secret_key = moymir.secret_key
+        def fetch_current_moymir_user
+          Moymir::User.from_moymir_params(moymir, moymir_params.any? ? moymir_params : signed_params)
+        end
         
-        params[:sig] == Digest::MD5.hexdigest(param_string + secret_key)
-      end
+        def encrypt(params)
+          encryptor = ActiveSupport::MessageEncryptor.new(moymir.secret_key)
+          
+          encryptor.encrypt_and_sign(params)
+        end
     end
 
   end

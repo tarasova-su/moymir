@@ -2,11 +2,29 @@ module Moymir
   class User
     class << self
       # Creates an instance of Moymir::User using application config and request parameters
-      def from_request(options)
-        return if options.nil? || options['vid'].nil?
+      def from_moymir_params(config, params)
+        params = decrypt(config, params) if params.is_a?(String)
         
-        new(options)
+        return if params.nil? || params['vid'].nil? || !signature_valid?(config, params)
+        
+        new(params)
       end
+      
+      protected
+        def decrypt(config, encrypted_params)
+          encryptor = ActiveSupport::MessageEncryptor.new(config.secret_key)
+          
+          encryptor.decrypt_and_verify(encrypted_params)
+        rescue ActiveSupport::MessageEncryptor::InvalidMessage
+          nil
+        end      
+        
+        def signature_valid?(config, params)
+          param_string = params.except('sig').sort.map{|key, value| "#{key}=#{value}"}.join
+          secret_key   = config.secret_key
+          
+          params['sig'] == Digest::MD5.hexdigest(param_string + secret_key)
+        end
     end
 
     def initialize(options = {})

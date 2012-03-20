@@ -12,16 +12,14 @@ module Moymir
       def call(env)
         request = ::Rack::Request.new(env)
 
-        if request.POST['session_key'] && request.post? && request.params['_method'].blank?
+        if (request.POST['session_key'] || request.POST['signed_params']) && request.post? && request.params['_method'].blank?
           env['REQUEST_METHOD'] = 'GET'
         end
 
-        # Put signed_request parameter to the same place where HTTP header X-Signed-Request come.
+        # Put signed_params parameter to the same place where HTTP header X-Signed-Params come.
         # This let us work both with params and HTTP headers in the same way. Very useful for AJAX.
         
-        %w{vid session_key session_expire ext_perm}.each do |attr|
-          env["HTTP_#{attr.upcase}"] ||= request.POST[attr]
-        end
+        env["HTTP_SIGNED_PARAMS"] ||= request.POST['signed_params']
         
         @app.call(env)
       end

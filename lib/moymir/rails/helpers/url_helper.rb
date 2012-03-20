@@ -14,7 +14,7 @@ module Moymir
               canvas = false
             end
 
-            url = super(options.except(:signed_request))
+            url = super(options.except(:signed_params))
 
             canvas ? moymir_canvas_page_url + url : url
           else
