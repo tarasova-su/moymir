@@ -15,7 +15,7 @@ module Moymir
           encryptor = ActiveSupport::MessageEncryptor.new(config.secret_key)
           
           encryptor.decrypt_and_verify(encrypted_params)
-        rescue ActiveSupport::MessageEncryptor::InvalidMessage
+        rescue ActiveSupport::MessageEncryptor::InvalidMessage, ActiveSupport::MessageVerifier::InvalidSignature 
           nil
         end      
         

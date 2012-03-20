@@ -19,6 +19,10 @@ module Moymir
 
         # Redirects user to a definite URL with JavaScript code that overwrites
         # top frame location. Use it to redirect user from within an iframe.
+        
+        # FIXME in Moymir apps, params should go to hash!
+        # only redirect_from_iframe root_url(:canvas => true) works properly now
+        
         def redirect_from_iframe(url_options)
           redirect_url = url_options.is_a?(String) ? url_options : url_for(url_options)
 
