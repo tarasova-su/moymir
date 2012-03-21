@@ -33,7 +33,7 @@ module Moymir
 
     # Checks if user is authenticated in the application
     def authenticated?      
-      !session_key.blank? && Time.now < session_expires_at
+      !session_key.blank?
     end
 
     # Mailru UID
