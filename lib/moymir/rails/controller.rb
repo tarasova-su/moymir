@@ -21,7 +21,7 @@ module Moymir
 
       protected
 
-      MOYMIR_PARAM_NAMES = %w{app_id session_key session_expire oid vid is_app_user ext_perm window_id view referer_type referer_id authentication_key sig }
+      MOYMIR_PARAM_NAMES = %w{app_id session_key session_expire oid vid is_app_user ext_perm window_id view referer_type referer_id authentication_key sig ref_notify }
 
       # Accessor to current application config. Override it in your controller
       # if you need multi-application support or per-request configuration selection.
