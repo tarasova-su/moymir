@@ -46,7 +46,7 @@ module Moymir
       
       # encrypted moymir params
       def signed_params
-        if moymir_params.any?
+        if moymir_params['session_key'].present?
           encrypt(moymir_params)
         else
           request.env["HTTP_SIGNED_PARAMS"] || request.params['signed_params'] || flash['signed_params']
@@ -56,7 +56,7 @@ module Moymir
       private
 
         def fetch_current_moymir_user
-          Moymir::User.from_moymir_params(moymir, moymir_params.any? ? moymir_params : signed_params)
+          Moymir::User.from_moymir_params(moymir, moymir_params['session_key'].present? ? moymir_params : signed_params)
         end
         
         def encrypt(params)

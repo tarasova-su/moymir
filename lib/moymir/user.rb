@@ -17,9 +17,9 @@ module Moymir
           encryptor.decrypt_and_verify(encrypted_params)
         rescue ActiveSupport::MessageEncryptor::InvalidMessage, ActiveSupport::MessageVerifier::InvalidSignature
           ::Rails.logger.error "\nError while decoding moymir params: \"#{ encrypted_params }\""
-          
+
           nil
-        end      
+        end
         
         def signature_valid?(config, params)
           param_string = params.except('sig').sort.map{|key, value| "#{key}=#{value}"}.join
