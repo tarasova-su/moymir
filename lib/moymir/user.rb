@@ -15,7 +15,9 @@ module Moymir
           encryptor = ActiveSupport::MessageEncryptor.new(config.secret_key)
           
           encryptor.decrypt_and_verify(encrypted_params)
-        rescue ActiveSupport::MessageEncryptor::InvalidMessage, ActiveSupport::MessageVerifier::InvalidSignature 
+        rescue ActiveSupport::MessageEncryptor::InvalidMessage, ActiveSupport::MessageVerifier::InvalidSignature
+          ::Rails.logger.error "\nError while decoding moymir params: \"#{ encrypted_params }\""
+          
           nil
         end      
         
